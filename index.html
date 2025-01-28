@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeEase - Your Home Essentials</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* Breaking News Banner */
+        .breaking-news {
+            background-color: #ec2b9f;
+            color: #333;
+            font-weight: bold;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        .breaking-news-content {
+            white-space: nowrap;
+            animation: scrollLeft 15s linear infinite;
+        }
+        @keyframes scrollLeft {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            margin-top: 40px; /* Space for breaking news */
+        }
+        header .brand-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+        }
+        header .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            text-align: center;
+        }
+        header .search-bar input {
+            padding: 5px 10px;
+            width: 70%;
+            font-size: 16px;
+        }
+        header .auth-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .menu-toggle {
+            display: none; /* Hidden by default */
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #333;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block; /* Show the hamburger menu on small screens */
+            }
+            nav {
+                display: none; /* Hide the navigation by default on small screens */
+                flex-direction: column;
+            }
+            nav.active {
+                display: flex; /* Show the navigation when the menu is toggled */
+            }
+        }
+
+        /* Image Gallery Section */
+        .image-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px 0;
+            flex-wrap: wrap;
+        }
+        .image-gallery .image-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
+            height: auto;
+        }
+        .image-gallery .image-item img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .image-gallery .image-item p {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+        .image-gallery .image-item p a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .image-gallery .image-item p a:hover {
+            color: #ec2b9f;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f1f1f1;
+            margin-top: 30px;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px; /* Hidden initially */
+            width: 400px;
+            height: 80%;
+            background-color: #fff;
+            box-shadow: -1px 0 3px rgba(243, 40, 135, 0.678);
+            overflow-y: auto;
+            transition: right 0.3s ease-in-out;
+            z-index: 100;
+        }
+        .cart-sidebar.open {
+            right: 0; /* Slide in */
+        }
+        .cart-sidebar header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 26px;
+        }
+        .cart-sidebar .cart-content {
+            padding: 20px;
+        }
+        .cart-sidebar .close-cart {
+            background-color: #ec2b9f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .cart-sidebar .close-cart:hover {
+            background-color: #e92396;
+        }
+
+        /* Overlay */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
+        }
+        .cart-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Breaking News Section -->
+    <div class="breaking-news">
+        <div class="breaking-news-content">
+            <span>🚨 We Bring HomeEase to You in Just 3-4 days! 🚨</span>
+        </div>
+    </div>
+
+    <!-- Header and Main Content -->
+    <header>
+        <div class="brand-name">HomeEase</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="auth-links">
+            <a href="login.html">Log In</a>
+            <a href="#" id="open-cart">Cart</a>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+    </header>
+    
+    <nav id="nav-menu">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="new-arrivals.html">New Arrivals</a>
+        <a href="dining.html">Dining</a>
+        <a href="bedding-sets.html">Full Bedding Sets</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+
+    <!-- Image Gallery Section -->
+    <div class="image-gallery">
+        <div class="image-item">
+            <a href="product1.html">
+                <img src="./images/product1.jpg" alt="Bedsheets Set">
+            </a>
+            <p><a href="product1.html">Bedsheets Set</a></p>
+        </div>
+        <div class="image-item">
+            <a href="product2.html">
+                <img src="images/Product 2.png" alt="Fitted Sheets">
+            </a>
+            <p><a href="product2.html">Fitted Sheets</a></p>
+        </div>
+        <div class="image-item">
+            <a href="product3.html">
+                <img src="images/Product 3.png" alt="Comforter and Bedsheets Combo">
+            </a>
+            <p><a href="product3.html">Comforter and Bedsheets Combo</a></p>
+        </div>
+        <div class="image-item">
+            <a href="product4.html">
+                <img src="images/product4.jpg" alt="Duvet Set">
+            </a>
+            <p><a href="product4.html">Duvet Set</a></p>
+        </div>
+        <div class="image-item">
+            <a href="product5.html">
+                <img src="images/product5.jpg" alt="Curtains">
+            </a>
+            <p><a href="product5.html">Curtains</a></p>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <header>Your Cart</header>
+        <div class="cart-content">
+            <p>No items in your cart yet!</p>
+            <button class="close-cart" id="close-cart">Close Cart</button>
+        </div>
+    </div>
+    <!-- Overlay -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 HomeEase. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Hamburger Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Cart Toggle
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const openCartButton = document.getElementById('open-cart');
+        const closeCartButton = document.getElementById('close-cart');
+
+        openCartButton.addEventListener('click', () => {
+            cartSidebar.classList.add('open');
+            cartOverlay.classList.add('active');
+        });
+
+        closeCartButton.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('active');
+        });
+
+        cartOverlay.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('active');
+        });
+
+        // Breaking News Text Repetition
+        const breakingNewsContent = document.querySelector('.breaking-news-content');
+        breakingNewsContent.innerHTML = breakingNewsContent.innerHTML.repeat(10);
+    </script>
+</body>
+</html>
